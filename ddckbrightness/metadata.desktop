@@ -1,0 +1,23 @@
+[Desktop Entry]
+Name=DDC KBrightness
+Comment=Easy adjustment of external monitor brightness using DDCUtil.
+
+Icon=display-brightness-symbolic
+Type=Service
+ServiceTypes=Plasma/Applet
+
+X-KDE-PluginInfo-Author=Vijay Prema
+X-KDE-PluginInfo-Email=vjprema@gmail.com
+X-KDE-PluginInfo-Version=1.1
+X-KDE-PluginInfo-Website=https://techoneer.com
+X-KDE-PluginInfo-Category=Utilities
+X-KDE-PluginInfo-Depends=ddcutil
+X-KDE-PluginInfo-License=GPLv3
+X-KDE-PluginInfo-EnabledByDefault=true
+X-KDE-PluginInfo-Name=org.kde.plasma.ddckbrightness
+
+X-Plasma-API=declarativeappletscript
+X-Plasma-MainScript=ui/main.qml
+X-Plasma-Requires-FileDialog=Unused
+X-Plasma-Requires-LaunchApp=Unused
+X-Plasma-DefaultSize=200,300
