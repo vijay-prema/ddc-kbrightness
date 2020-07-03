@@ -11,10 +11,11 @@ Adjust your external monitor brightness using a slider in KDE tray area.
 * Monitor/PC must support [DDC](https://en.wikipedia.org/wiki/Display_Data_Channel). Run `ddcutil detect` to check.
 
 # Installation
-1. Download and extract the zip, or `git clone` to local drive
-2. Go into the project directory (containing ddckbrightness directory)
-3. Run `kpackagetool5 -t Plasma/Applet -i ddckbrightness` (change `-i` to `-u` to update a previous install)
-4. You may need to restart KDE (log out and in again)
+1. First make sure you have the Requirements set up, as per above
+2. Download and extract the zip, or `git clone` to local drive
+3. Go into the project directory (containing ddckbrightness directory)
+4. Run `kpackagetool5 -t Plasma/Applet -i ddckbrightness` (change `-i` to `-u` to update a previous install)
+5. You may need to restart KDE (log out and in again)
 
 # TODO
 Suggestions/PRs welcome.
