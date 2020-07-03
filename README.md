@@ -18,7 +18,7 @@ Adjust your external monitor brightness using a slider in KDE tray area.
 
 # TODO
 Suggestions/PRs welcome.
-* Fix apply settings without having to restart app
-* Fix using Display number and Feature code instead of hard-coded values (currently display 1 and feature 10)
+* ~~Fix apply settings without having to restart app~~
+* ~~Fix using Display number and Feature code instead of hard-coded values (currently display 1 and feature 10)~~
 * Add auto detection of monitor and feature
 * Create installer/package
