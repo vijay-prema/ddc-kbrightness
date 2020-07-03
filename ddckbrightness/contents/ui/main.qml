@@ -11,22 +11,28 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 
 Item {
     id: main
-    property var brigthnessMax : 0
-    property Item seekbar
+//    property Item seekbar
     property bool dimmed : false
-    property var lastReal: -1
+
+	readonly property int brightnessMax: plasmoid.configuration.limitBrightnessMax
+	readonly property int brightnessMin: plasmoid.configuration.limitBrightnessMin
+	readonly property string featureCode: plasmoid.configuration.featureCode
+	readonly property int displayNumber: plasmoid.configuration.displayNumber
+	readonly property int iconWidth: plasmoid.configuration.iconWidth
 
     Plasmoid.icon: {
         source: {
-            if(plasmoid.configuration.iconWidth != 0) plasmoid.Layout.maximumWidth = plasmoid.configuration.iconWidth;
-            return "display-brightness-symbolic"
+            if(iconWidth != 0)
+                plasmoid.Layout.maximumWidth = iconWidth;
+            return "display-brightness-symbolic";
         }
     }
 
     Plasmoid.preferredRepresentation: Plasmoid.compactRepresentation
+
     Plasmoid.fullRepresentation: Item {
         id: popup
-        width: 50
+        width: 30
 //        height: (Screen.desktopAvailableHeight/4)
         height: 300
         GroupBox {
@@ -43,7 +49,7 @@ Item {
                 anchors.centerIn: parent
                 height: parent.height;
                 orientation: Qt.Vertical
-                value: { cmd.exec("ddcutil getvcp 10 | grep -Po '(current value =)\\s*\\K.*(?=,)'"); }
+//                value: 0
                 stepSize: 10
                 minimumValue: 0
                 maximumValue: 100
@@ -51,43 +57,20 @@ Item {
                 onPressedChanged:
                 {
                     if(!pressed) {
-                        cmd.exec( "ddcutil setvcp 10 " + Math.round((bControl.value/100)*(plasmoid.configuration.limitBrightnessMax-plasmoid.configuration.limitBrightnessMin)+plasmoid.configuration.limitBrightnessMin) );
+                        cmd.exec( "ddcutil -d " + displayNumber + " setvcp " + featureCode + " " + Math.round((bControl.value/100)*(brightnessMax-brightnessMin)+brightnessMin) );
                     }
                 }
 
             }
         }
+
         Component.onCompleted: {
-            if(seekbar == null) seekbar = bControl;
+//            if(seekbar == null) seekbar = bControl;
+            cmd.exec("ddcutil -d " + displayNumber + "getvcp " + featureCode + " | grep -Po '(current value =)\\s*\\K.*(?=,)'");
         }
+
     }
 
-    Connections {
-        target: cmd
-        onExited: {
-            if(exitCode == 0 && exitStatus == 0){
-                if(stdout != null && stdout.length > 5){
-                    if(stdout.substring(0, 6) === "Screen"){
-                        var array = stdout.split('\n');
-                        if(array.length > 1){
-                            var out = array[1].substring(0,  (array[1].indexOf("connected") -1));
-                            if(out.length > 0){
-                                plasmoid.configuration.output = out;
-                            }
-                        }
-                    }
-                }
-
-            }
-            if(stderr.indexOf("not found") > -1){
-                if( exitCode == 1 && exitStatus == 0){
-                    //warning: output ... not found; ignoring
-                    //xrandr: Need crtc to set gamma on.
-                }
-                if( exitCode == 127 && exitStatus == 0) errorDialog.visible = true;
-            }
-        }
-    }
 
     MessageDialog {
         id: errorDialog
@@ -95,7 +78,7 @@ Item {
         text: "Components xrandr and qdbus are required. Please install the missing one in your package manager."
         icon: StandardIcon.Critical
         onAccepted: {
-            console.log("onAccepted")
+            console.log("onAccepted");
         }
     }
 
@@ -116,6 +99,7 @@ Item {
         }
     }
 
+    Plasmoid.toolTipSubText: {"Adjust monitor brightness."}
 
     PlasmaCore.DataSource {
         id: cmd
@@ -135,6 +119,17 @@ Item {
         signal exited(int exitCode, int exitStatus, string stdout, string stderr)
     }
 
-    Plasmoid.toolTipSubText: {"Adjust monitor brightness."}
+    Connections {
+        target: cmd
+        onExited: {
+            if(exitCode == 0 && exitStatus == 0) {
+                var tryInt = parseInt(stdout);
+                if(stdout != null && stdout.length < 4 && tryInt != NaN ) {
+                    bControl.value = tryInt;
+                }
+            }
+        }
+    }
+
 
 }

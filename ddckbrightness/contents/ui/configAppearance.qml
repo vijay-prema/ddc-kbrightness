@@ -12,11 +12,13 @@ Item {
     function saveConfig() {
         plasmoid.configuration.limitBrightnessMax = limitBrightnessMax.value
         plasmoid.configuration.limitBrightnessMin = limitBrightnessMin.value
-        plasmoid.configuration.limitDimness = limitDimness.value
         plasmoid.configuration.iconWidth = iconWidth.value;
         plasmoid.configuration.displayNumber = displayNumber.value;
-        plasmoid.configuration.featureCode = featureCode.value;
+        plasmoid.configuration.featureCode = featureCode.text;
     }
+
+//    property alias cfg_brightnessMax: limitBrightnessMax.value
+//    property alias cfg_brightnessMin: limitBrightnessMin.value
 
     ColumnLayout {
 
@@ -97,7 +99,7 @@ Item {
 
                     Controls1.SpinBox {
                         id: iconWidth
-                        value: 0
+                        value: plasmoid.configuration.iconWidth
                         minimumValue: 0
                         maximumValue: 128
                         stepSize: 1
@@ -128,7 +130,7 @@ Item {
 
                     Controls1.SpinBox {
                         id: displayNumber
-                        value: 1
+                        value: plasmoid.configuration.displayNumber
                         minimumValue: 1
                         maximumValue: 32
                         stepSize: 1
@@ -150,7 +152,7 @@ Item {
 
                     Controls1.TextField {
                         id: featureCode
-                        text: "10"
+                        text: plasmoid.configuration.featureCode
                         maximumLength: 2
                         implicitWidth: 80
                     }
